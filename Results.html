@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - Bharat Yatra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-saffron: #FF9933;
+            --primary-green: #138808;
+            --navy-blue: #000080;
+            --terracotta: #D2691E;
+            --cream: #FFF8E7;
+            --charcoal: #2C2C2C;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #FFF 100%);
+            color: var(--charcoal);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-saffron), var(--terracotta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--charcoal);
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-saffron), var(--primary-green));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 100px auto 2rem;
+            padding: 0 2rem;
+        }
+
+        .search-summary {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .search-summary h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--charcoal);
+        }
+
+        .route-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .route-arrow {
+            font-size: 1.5rem;
+            color: var(--primary-saffron);
+        }
+
+        .filter-bar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #E0E0E0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary-saffron);
+            background: var(--cream);
+        }
+
+        .results-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            animation: slideInUp 0.5s ease-out both;
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .result-card:nth-child(1) { animation-delay: 0.1s; }
+        .result-card:nth-child(2) { animation-delay: 0.2s; }
+        .result-card:nth-child(3) { animation-delay: 0.3s; }
+        .result-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .vehicle-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--charcoal);
+        }
+
+        .vehicle-type {
+            background: linear-gradient(135deg, var(--primary-saffron), var(--terracotta));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .time-info {
+            text-align: center;
+        }
+
+        .time {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--charcoal);
+        }
+
+        .station {
+            color: #666;
+            margin-top: 0.3rem;
+        }
+
+        .duration {
+            text-align: center;
+            padding-top: 1rem;
+        }
+
+        .duration-time {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+
+        .duration-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-green);
+        }
+
+        .price-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .seats-available {
+            color: var(--primary-green);
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+
+        .book-btn {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary-green), #0d6406);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .book-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(19, 136, 8, 0.3);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-results h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--charcoal);
+        }
+
+        @media (max-width: 768px) {
+            .card-body {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .card-footer {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">🚆 Bharat Yatra</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="map.html">Route Map</a></li>
+                <li><a href="bookings.html">My Bookings</a></li>
+                <li><a href="address.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="search-summary" id="searchSummary"></div>
+
+        <div class="filter-bar">
+            <button class="filter-btn" onclick="sortBy('price')">💰 Sort by Price</button>
+            <button class="filter-btn" onclick="sortBy('duration')">⏱️ Sort by Duration</button>
+            <button class="filter-btn" onclick="sortBy('departure')">🕐 Sort by Departure</button>
+        </div>
+
+        <div class="results-container" id="resultsContainer"></div>
+    </div>
+
+    <script>
+        const trainData = {
+            'Delhi-Mumbai': [
+                {name: 'Rajdhani Express', type: 'AC 2-Tier', departure: '16:30', arrival: '08:35', duration: '16h 5m', price: 2850, seats: 48, number: '12951'},
+                {name: 'August Kranti Rajdhani', type: 'AC 3-Tier', departure: '17:50', arrival: '09:20', duration: '15h 30m', price: 2150, seats: 62, number: '12953'},
+                {name: 'Golden Temple Mail', type: 'Sleeper', departure: '19:30', arrival: '13:45', duration: '18h 15m', price: 985, seats: 120, number: '12903'},
+                {name: 'Duronto Express', type: 'AC 2-Tier', departure: '22:15', arrival: '12:20', duration: '14h 5m', price: 3200, seats: 35, number: '12259'}
+            ],
+            'Mumbai-Delhi': [
+                {name: 'Mumbai Rajdhani', type: 'AC 2-Tier', departure: '16:25', arrival: '08:35', duration: '16h 10m', price: 2850, seats: 52, number: '12952'},
+                {name: 'August Kranti', type: 'AC 3-Tier', departure: '17:40', arrival: '09:40', duration: '16h', price: 2150, seats: 58, number: '12954'},
+                {name: 'Paschim Express', type: 'Sleeper', departure: '21:05', arrival: '18:25', duration: '21h 20m', price: 945, seats: 95, number: '12925'}
+            ],
+            'Delhi-Bangalore': [
+                {name: 'Karnataka Express', type: 'AC 2-Tier', departure: '18:15', arrival: '06:15', duration: '36h', price: 3850, seats: 42, number: '12628'},
+                {name: 'Rajdhani Express', type: 'AC 3-Tier', departure: '20:30', arrival: '05:50', duration: '33h 20m', price: 3250, seats: 55, number: '12430'},
+                {name: 'Sampark Kranti', type: 'Sleeper', departure: '08:45', arrival: '20:30', duration: '35h 45m', price: 1450, seats: 88, number: '12649'}
+            ]
+        };
+
+        const busData = {
+            'Delhi-Mumbai': [
+                {name: 'Volvo Multi-Axle Sleeper', type: 'AC Sleeper', departure: '18:00', arrival: '12:00', duration: '18h', price: 1850, seats: 28, operator: 'RedBus Premium'},
+                {name: 'Scania Multi-Axle', type: 'AC Semi-Sleeper', departure: '19:30', arrival: '14:30', duration: '19h', price: 1450, seats: 42, operator: 'VRL Travels'},
+                {name: 'Mercedes Luxury Coach', type: 'AC Sleeper', departure: '17:00', arrival: '11:30', duration: '18h 30m', price: 2200, seats: 18, operator: 'Sharma Travels'},
+                {name: 'Volvo Semi-Sleeper', type: 'AC Semi-Sleeper', departure: '20:00', arrival: '15:00', duration: '19h', price: 1350, seats: 38, operator: 'National Travels'}
+            ],
+            'Mumbai-Delhi': [
+                {name: 'Volvo Multi-Axle Sleeper', type: 'AC Sleeper', departure: '17:30', arrival: '12:00', duration: '18h 30m', price: 1850, seats: 24, operator: 'RedBus Premium'},
+                {name: 'Mercedes Luxury', type: 'AC Sleeper', departure: '18:45', arrival: '13:45', duration: '19h', price: 2150, seats: 16, operator: 'Orange Travels'},
+                {name: 'Scania Multi-Axle', type: 'AC Semi-Sleeper', departure: '19:00', arrival: '14:00', duration: '19h', price: 1500, seats: 36, operator: 'Patel Travels'}
+            ],
+            'Delhi-Bangalore': [
+                {name: 'Volvo Multi-Axle Sleeper', type: 'AC Sleeper', departure: '16:00', arrival: '18:00', duration: '26h', price: 2950, seats: 30, operator: 'KPN Travels'},
+                {name: 'Scania AC Sleeper', type: 'AC Sleeper', departure: '17:30', arrival: '20:00', duration: '26h 30m', price: 2650, seats: 28, operator: 'SRS Travels'},
+                {name: 'Mercedes Multi-Axle', type: 'AC Semi-Sleeper', departure: '15:00', arrival: '18:30', duration: '27h 30m', price: 2200, seats: 40, operator: 'VRL Travels'}
+            ]
+        };
+
+        let currentResults = [];
+        let searchData = {};
+
+        function initializePage() {
+            const data = sessionStorage.getItem('searchData');
+            if (!data) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            searchData = JSON.parse(data);
+            displaySearchSummary();
+            loadResults();
+        }
+
+        function displaySearchSummary() {
+            const summary = document.getElementById('searchSummary');
+            const icon = searchData.transportType === 'train' ? '🚆' : '🚌';
+            summary.innerHTML = `
+                <h2>${icon} Available ${searchData.transportType === 'train' ? 'Trains' : 'Buses'}</h2>
+                <div class="route-info">
+                    <strong>${searchData.from}</strong>
+                    <span class="route-arrow">→</span>
+                    <strong>${searchData.to}</strong>
+                    <span style="color: #666; margin-left: 1rem;">📅 ${new Date(searchData.date).toLocaleDateString('en-IN', {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'})}</span>
+                    <span style="color: #666;">👥 ${searchData.passengers} Passenger(s)</span>
+                </div>
+            `;
+        }
+
+        function loadResults() {
+            const routeKey = `${searchData.from}-${searchData.to}`;
+            const dataSource = searchData.transportType === 'train' ? trainData : busData;
+            
+            currentResults = dataSource[routeKey] || [];
+            displayResults();
+        }
+
+        function displayResults() {
+            const container = document.getElementById('resultsContainer');
+            
+            if (currentResults.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <h3>😔 No ${searchData.transportType}s found</h3>
+                        <p>Sorry, we don't have any ${searchData.transportType}s available for this route on the selected date.</p>
+                        <button class="book-btn" onclick="window.location.href='index.html'" style="margin-top: 2rem;">Search Again</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = currentResults.map((item, index) => `
+                <div class="result-card">
+                    <div class="card-header">
+                        <div class="vehicle-name">
+                            ${searchData.transportType === 'train' ? '🚆' : '🚌'} ${item.name}
+                            ${item.number ? `<span style="font-size: 0.8rem; color: #666; font-weight: 400;"> (#${item.number})</span>` : ''}
+                            ${item.operator ? `<div style="font-size: 0.9rem; color: #666; font-weight: 400; margin-top: 0.3rem;">${item.operator}</div>` : ''}
+                        </div>
+                        <div class="vehicle-type">${item.type}</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="time-info">
+                            <div class="time">${item.departure}</div>
+                            <div class="station">${searchData.from}</div>
+                        </div>
+                        <div class="duration">
+                            <div class="duration-time">${item.duration}</div>
+                            <div class="duration-label">Travel Time</div>
+                        </div>
+                        <div class="time-info">
+                            <div class="time">${item.arrival}</div>
+                            <div class="station">${searchData.to}</div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div>
+                            <div class="price">₹${item.price.toLocaleString('en-IN')}</div>
+                            <div class="price-label">per person</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <span class="seats-available">✅ ${item.seats} seats available</span>
+                            <button class="book-btn" onclick="bookTicket(${index})">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function sortBy(criteria) {
+            if (criteria === 'price') {
+                currentResults.sort((a, b) => a.price - b.price);
+            } else if (criteria === 'duration') {
+                currentResults.sort((a, b) => {
+                    const durationA = parseDuration(a.duration);
+                    const durationB = parseDuration(b.duration);
+                    return durationA - durationB;
+                });
+            } else if (criteria === 'departure') {
+                currentResults.sort((a, b) => {
+                    const timeA = parseTime(a.departure);
+                    const timeB = parseTime(b.departure);
+                    return timeA - timeB;
+                });
+            }
+            displayResults();
+        }
+
+        function parseDuration(duration) {
+            const parts = duration.match(/(\d+)h\s*(\d+)?m?/);
+            const hours = parseInt(parts[1]) || 0;
+            const minutes = parseInt(parts[2]) || 0;
+            return hours * 60 + minutes;
+        }
+
+        function parseTime(time) {
+            const [hours, minutes] = time.split(':').map(Number);
+            return hours * 60 + minutes;
+        }
+
+        function bookTicket(index) {
+            const selectedVehicle = currentResults[index];
+            const bookingInfo = {
+                ...searchData,
+                vehicle: selectedVehicle,
+                bookingId: 'BKG' + Date.now(),
+                bookingDate: new Date().toISOString(),
+                totalAmount: selectedVehicle.price * parseInt(searchData.passengers)
+            };
+
+            sessionStorage.setItem('currentBooking', JSON.stringify(bookingInfo));
+            window.location.href = 'payment.html';
+        }
+
+        initializePage();
+    </script>
+</body>
+</html>

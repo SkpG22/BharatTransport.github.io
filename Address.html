@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Bharat Yatra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-saffron: #FF9933;
+            --primary-green: #138808;
+            --navy-blue: #000080;
+            --terracotta: #D2691E;
+            --cream: #FFF8E7;
+            --charcoal: #2C2C2C;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #FFF 100%);
+            color: var(--charcoal);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-saffron), var(--terracotta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--charcoal);
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-saffron), var(--primary-green));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 100px auto 2rem;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: var(--charcoal);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #666;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.6s ease-out both;
+        }
+
+        .info-card:nth-child(1) { animation-delay: 0.1s; }
+        .info-card:nth-child(2) { animation-delay: 0.2s; }
+        .info-card:nth-child(3) { animation-delay: 0.3s; }
+        .info-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--charcoal);
+        }
+
+        .card-content {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .card-content p {
+            margin-bottom: 0.8rem;
+        }
+
+        .card-content strong {
+            color: var(--charcoal);
+            display: block;
+            margin-top: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 1rem 0;
+            padding: 0.8rem;
+            background: var(--cream);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: #FFE8B8;
+            transform: translateX(5px);
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .office-hours {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .hour-card {
+            background: var(--cream);
+            padding: 1.2rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .day {
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .time {
+            color: #666;
+        }
+
+        .map-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.6s ease-out 0.5s both;
+        }
+
+        .map-placeholder {
+            height: 400px;
+            background: linear-gradient(135deg, var(--cream), #f5f5f5);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #ccc;
+            border: 3px dashed #ddd;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .social-btn {
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-saffron), var(--terracotta));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 153, 51, 0.3);
+        }
+
+        .emergency-banner {
+            background: linear-gradient(135deg, #FF6B6B, #C92A2A);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        .emergency-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .social-links {
+                flex-direction: column;
+            }
+
+            .social-btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">🚆 Bharat Yatra</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="map.html">Route Map</a></li>
+                <li><a href="bookings.html">My Bookings</a></li>
+                <li><a href="address.html" class="active">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>📍 Contact Us</h1>
+            <p>We're here to make your journey memorable</p>
+        </div>
+
+        <div class="emergency-banner">
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🚨 24/7 Emergency Helpline</div>
+            <div class="emergency-number">1800-XXX-XXXX</div>
+            <div>For urgent travel assistance and emergencies</div>
+        </div>
+
+        <div class="content-grid">
+            <!-- Head Office -->
+            <div class="info-card">
+                <div class="card-icon">🏢</div>
+                <div class="card-title">Head Office</div>
+                <div class="card-content">
+                    <strong>Bharat Yatra Transport Company Pvt. Ltd.</strong>
+                    <p>
+                        Metro Tower, 4th Floor<br>
+                        Plot No. 42, Sector 18<br>
+                        Connaught Place<br>
+                        New Delhi - 110001<br>
+                        India
+                    </p>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="info-card">
+                <div class="card-icon">📞</div>
+                <div class="card-title">Get in Touch</div>
+                <div class="card-content">
+                    <div class="contact-item">
+                        <div class="contact-icon">📱</div>
+                        <div>+91-11-2345-6789</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">☎️</div>
+                        <div>+91-11-2345-6790</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div>info@bharatyatra.in</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">💼</div>
+                        <div>support@bharatyatra.in</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Regional Offices -->
+            <div class="info-card">
+                <div class="card-icon">🌏</div>
+                <div class="card-title">Regional Offices</div>
+                <div class="card-content">
+                    <strong>Mumbai Office</strong>
+                    <p>Nariman Point, Mumbai - 400021<br>📞 +91-22-1234-5678</p>
+                    
+                    <strong>Bangalore Office</strong>
+                    <p>MG Road, Bangalore - 560001<br>📞 +91-80-1234-5678</p>
+                    
+                    <strong>Chennai Office</strong>
+                    <p>Anna Salai, Chennai - 600002<br>📞 +91-44-1234-5678</p>
+                    
+                    <strong>Kolkata Office</strong>
+                    <p>Park Street, Kolkata - 700016<br>📞 +91-33-1234-5678</p>
+                </div>
+            </div>
+
+            <!-- Office Hours -->
+            <div class="info-card">
+                <div class="card-icon">🕐</div>
+                <div class="card-title">Office Hours</div>
+                <div class="card-content">
+                    <div class="office-hours">
+                        <div class="hour-card">
+                            <div class="day">Monday - Friday</div>
+                            <div class="time">9:00 AM - 6:00 PM</div>
+                        </div>
+                        <div class="hour-card">
+                            <div class="day">Saturday</div>
+                            <div class="time">10:00 AM - 4:00 PM</div>
+                        </div>
+                        <div class="hour-card">
+                            <div class="day">Sunday</div>
+                            <div class="time">Closed</div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 1.5rem; text-align: center; color: var(--primary-green); font-weight: 600;">
+                        💬 Customer Support: Available 24/7
+                    </p>
+                </div>
+            </div>
+
+            <!-- Connect With Us -->
+            <div class="info-card full-width">
+                <div class="card-icon">🌐</div>
+                <div class="card-title">Connect With Us</div>
+                <div class="card-content">
+                    <p>Stay updated with our latest offers, routes, and travel tips on social media!</p>
+                    <div class="social-links">
+                        <button class="social-btn" onclick="alert('Facebook: @BharatYatraOfficial')">
+                            📘 Facebook
+                        </button>
+                        <button class="social-btn" onclick="alert('Twitter: @BharatYatra')">
+                            🐦 Twitter
+                        </button>
+                        <button class="social-btn" onclick="alert('Instagram: @bharatyatra')">
+                            📸 Instagram
+                        </button>
+                        <button class="social-btn" onclick="alert('LinkedIn: Bharat Yatra Transport')">
+                            💼 LinkedIn
+                        </button>
+                        <button class="social-btn" onclick="alert('YouTube: Bharat Yatra')">
+                            🎥 YouTube
+                        </button>
+                        <button class="social-btn" onclick="alert('WhatsApp: +91-9876543210')">
+                            💬 WhatsApp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="map-container">
+            <div class="card-title" style="margin-bottom: 1.5rem;">📍 Find Us Here</div>
+            <div class="map-placeholder">
+                🗺️ Interactive Map<br>
+                <span style="font-size: 1rem; color: #999; display: block; margin-top: 1rem;">
+                    Connaught Place, New Delhi
+                </span>
+            </div>
+            <div style="text-align: center; margin-top: 1.5rem; color: #666;">
+                <p><strong>Nearest Metro:</strong> Rajiv Chowki Metro Station (Blue & Yellow Line)</p>
+                <p style="margin-top: 0.5rem;"><strong>Parking:</strong> Available at Metro Tower Parking Complex</p>
+            </div>
+        </div>
+    </div>
+
+    <footer style="background: var(--charcoal); color: white; padding: 3rem 2rem; text-align: center; margin-top: 4rem;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 1rem;">
+                🚆 Bharat Yatra
+            </h3>
+            <p style="margin-bottom: 1rem;">Making India's journeys memorable, one trip at a time.</p>
+            <p style="margin-bottom: 1.5rem; color: #999;">
+                Registered under Ministry of Road Transport & Highways and Indian Railways
+            </p>
+            <div style="border-top: 1px solid #555; padding-top: 1.5rem; margin-top: 1.5rem;">
+                <p>&copy; 2026 Bharat Yatra Transport Company Pvt. Ltd. All rights reserved.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #999;">
+                    CIN: U60200DL2020PTC123456 | GST: 07AABCB1234A1Z5
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

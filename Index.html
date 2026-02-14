@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bharat Yatra - Your Journey, Our Pride</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-saffron: #FF9933;
+            --primary-green: #138808;
+            --navy-blue: #000080;
+            --terracotta: #D2691E;
+            --cream: #FFF8E7;
+            --charcoal: #2C2C2C;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #FFF 100%);
+            color: var(--charcoal);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-saffron), var(--terracotta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--charcoal);
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-saffron), var(--primary-green));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-saffron);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 153, 51, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(19, 136, 8, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            33% {
+                transform: translate(30px, -30px) rotate(5deg);
+            }
+            66% {
+                transform: translate(-20px, 20px) rotate(-5deg);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+            position: relative;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 3rem;
+            position: relative;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Booking Container */
+        .booking-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            position: relative;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .booking-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-saffron), var(--primary-green));
+            border-radius: 30px 30px 0 0;
+        }
+
+        .transport-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            flex: 1;
+            max-width: 200px;
+            padding: 1.2rem 2rem;
+            border: 2px solid #E0E0E0;
+            background: white;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary-saffron);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 153, 51, 0.2);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary-saffron), var(--terracotta));
+            color: white;
+            border-color: var(--primary-saffron);
+            box-shadow: 0 10px 25px rgba(255, 153, 51, 0.3);
+        }
+
+        .tab-icon {
+            font-size: 1.5rem;
+        }
+
+        .booking-form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--charcoal);
+            font-size: 0.95rem;
+        }
+
+        input, select {
+            padding: 1rem 1.2rem;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-saffron);
+            box-shadow: 0 0 0 4px rgba(255, 153, 51, 0.1);
+        }
+
+        .search-btn {
+            grid-column: 1 / -1;
+            padding: 1.3rem;
+            background: linear-gradient(135deg, var(--primary-green), #0d6406);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(19, 136, 8, 0.3);
+        }
+
+        .search-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Decorative Images */
+        .deco-img {
+            position: fixed;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .train-img {
+            bottom: 10%;
+            left: 5%;
+            font-size: 150px;
+            animation: slideRight 25s linear infinite;
+        }
+
+        .bus-img {
+            top: 25%;
+            right: 5%;
+            font-size: 120px;
+            animation: slideLeft 20s linear infinite;
+        }
+
+        @keyframes slideRight {
+            0% {
+                transform: translateX(-100vw);
+            }
+            100% {
+                transform: translateX(100vw);
+            }
+        }
+
+        @keyframes slideLeft {
+            0% {
+                transform: translateX(100vw);
+            }
+            100% {
+                transform: translateX(-100vw);
+            }
+        }
+
+        /* Google Ads Section */
+        .ads-section {
+            margin: 4rem auto;
+            max-width: 1400px;
+            padding: 0 2rem;
+        }
+
+        .ad-space {
+            background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            border: 2px dashed #ccc;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #999;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--charcoal);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+            }
+
+            .booking-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .transport-tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">🚆 Bharat Yatra</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="map.html">Route Map</a></li>
+                <li><a href="bookings.html">My Bookings</a></li>
+                <li><a href="address.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Decorative Elements -->
+    <div class="deco-img train-img">🚂</div>
+    <div class="deco-img bus-img">🚌</div>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Journey Across India</h1>
+        <p>Book your rail and road adventures with ease and comfort</p>
+
+        <!-- Booking Container -->
+        <div class="booking-container">
+            <div class="transport-tabs">
+                <button class="tab-btn active" onclick="selectTransport('train')">
+                    <span class="tab-icon">🚆</span> Train
+                </button>
+                <button class="tab-btn" onclick="selectTransport('bus')">
+                    <span class="tab-icon">🚌</span> Bus
+                </button>
+            </div>
+
+            <form class="booking-form" onsubmit="searchRoutes(event)">
+                <input type="hidden" id="transportType" value="train">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Passenger Name</label>
+                        <input type="text" id="name" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="passengers">Number of Passengers</label>
+                        <input type="number" id="passengers" min="1" max="10" value="1" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="from">From</label>
+                        <select id="from" required>
+                            <option value="">Select Origin</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Mumbai">Mumbai</option>
+                            <option value="Bangalore">Bangalore</option>
+                            <option value="Chennai">Chennai</option>
+                            <option value="Kolkata">Kolkata</option>
+                            <option value="Hyderabad">Hyderabad</option>
+                            <option value="Pune">Pune</option>
+                            <option value="Ahmedabad">Ahmedabad</option>
+                            <option value="Jaipur">Jaipur</option>
+                            <option value="Lucknow">Lucknow</option>
+                            <option value="Chandigarh">Chandigarh</option>
+                            <option value="Amritsar">Amritsar</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="to">To</label>
+                        <select id="to" required>
+                            <option value="">Select Destination</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Mumbai">Mumbai</option>
+                            <option value="Bangalore">Bangalore</option>
+                            <option value="Chennai">Chennai</option>
+                            <option value="Kolkata">Kolkata</option>
+                            <option value="Hyderabad">Hyderabad</option>
+                            <option value="Pune">Pune</option>
+                            <option value="Ahmedabad">Ahmedabad</option>
+                            <option value="Jaipur">Jaipur</option>
+                            <option value="Lucknow">Lucknow</option>
+                            <option value="Chandigarh">Chandigarh</option>
+                            <option value="Amritsar">Amritsar</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date">Journey Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="returnDate">Return Date (Optional)</label>
+                        <input type="date" id="returnDate">
+                    </div>
+                </div>
+
+                <button type="submit" class="search-btn">🔍 Search Routes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Google Ads Section -->
+    <div class="ads-section">
+        <div class="ad-space">
+            📢 Advertisement Space - Google Ads
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Bharat Yatra Transport Company. All rights reserved.</p>
+        <p>Making India's journeys memorable, one trip at a time.</p>
+    </footer>
+
+    <script>
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('date').setAttribute('min', today);
+        document.getElementById('returnDate').setAttribute('min', today);
+
+        function selectTransport(type) {
+            document.getElementById('transportType').value = type;
+            
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            event.target.classList.add('active');
+        }
+
+        function searchRoutes(event) {
+            event.preventDefault();
+            
+            const bookingData = {
+                name: document.getElementById('name').value,
+                passengers: document.getElementById('passengers').value,
+                from: document.getElementById('from').value,
+                to: document.getElementById('to').value,
+                date: document.getElementById('date').value,
+                returnDate: document.getElementById('returnDate').value,
+                transportType: document.getElementById('transportType').value
+            };
+
+            // Validation
+            if (bookingData.from === bookingData.to) {
+                alert('Origin and destination cannot be the same!');
+                return;
+            }
+
+            // Store in sessionStorage
+            sessionStorage.setItem('searchData', JSON.stringify(bookingData));
+            
+            // Redirect to results page
+            window.location.href = 'results.html';
+        }
+    </script>
+</body>
+</html>

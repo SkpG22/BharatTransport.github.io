@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Map - Bharat Yatra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        :root {
+            --primary-saffron: #FF9933;
+            --primary-green: #138808;
+            --navy-blue: #000080;
+            --terracotta: #D2691E;
+            --cream: #FFF8E7;
+            --charcoal: #2C2C2C;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #FFF 100%);
+            color: var(--charcoal);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-saffron), var(--terracotta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--charcoal);
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-saffron), var(--primary-green));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 100px auto 2rem;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: var(--charcoal);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .map-controls {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .control-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--charcoal);
+        }
+
+        select {
+            padding: 1rem;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary-saffron);
+            box-shadow: 0 0 0 4px rgba(255, 153, 51, 0.1);
+        }
+
+        .show-route-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary-green), #0d6406);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .show-route-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(19, 136, 8, 0.3);
+        }
+
+        .map-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        #map {
+            height: 600px;
+            border-radius: 15px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .route-info {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .route-info.active {
+            display: block;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .info-card {
+            background: var(--cream);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .info-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 0.3rem;
+        }
+
+        .info-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .control-row {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            #map {
+                height: 400px;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">🚆 Bharat Yatra</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="map.html" class="active">Route Map</a></li>
+                <li><a href="bookings.html">My Bookings</a></li>
+                <li><a href="address.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>🗺️ Route Explorer</h1>
+            <p>Visualize your journey across India</p>
+        </div>
+
+        <div class="map-controls">
+            <div class="control-row">
+                <div class="form-group">
+                    <label for="fromCity">From</label>
+                    <select id="fromCity">
+                        <option value="">Select Origin</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Ahmedabad">Ahmedabad</option>
+                        <option value="Jaipur">Jaipur</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="toCity">To</label>
+                    <select id="toCity">
+                        <option value="">Select Destination</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Ahmedabad">Ahmedabad</option>
+                        <option value="Jaipur">Jaipur</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="transportMode">Mode</label>
+                    <select id="transportMode">
+                        <option value="train">🚆 Train</option>
+                        <option value="bus">🚌 Bus</option>
+                    </select>
+                </div>
+
+                <button class="show-route-btn" onclick="showRoute()">Show Route</button>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+
+        <div class="route-info" id="routeInfo">
+            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 1rem;">Route Details</h2>
+            <div class="info-grid" id="infoGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        // City coordinates
+        const cityCoords = {
+            'Delhi': [28.6139, 77.2090],
+            'Mumbai': [19.0760, 72.8777],
+            'Bangalore': [12.9716, 77.5946],
+            'Chennai': [13.0827, 80.2707],
+            'Kolkata': [22.5726, 88.3639],
+            'Hyderabad': [17.3850, 78.4867],
+            'Pune': [18.5204, 73.8567],
+            'Ahmedabad': [23.0225, 72.5714],
+            'Jaipur': [26.9124, 75.7873]
+        };
+
+        // Approximate distances (in km)
+        const distances = {
+            'Delhi-Mumbai': { train: 1384, bus: 1450 },
+            'Mumbai-Delhi': { train: 1384, bus: 1450 },
+            'Delhi-Bangalore': { train: 2150, bus: 2200 },
+            'Bangalore-Delhi': { train: 2150, bus: 2200 },
+            'Delhi-Chennai': { train: 2180, bus: 2230 },
+            'Chennai-Delhi': { train: 2180, bus: 2230 },
+            'Delhi-Kolkata': { train: 1472, bus: 1500 },
+            'Kolkata-Delhi': { train: 1472, bus: 1500 },
+            'Mumbai-Bangalore': { train: 981, bus: 1020 },
+            'Bangalore-Mumbai': { train: 981, bus: 1020 },
+            'Mumbai-Chennai': { train: 1279, bus: 1320 },
+            'Chennai-Mumbai': { train: 1279, bus: 1320 },
+            'Delhi-Hyderabad': { train: 1570, bus: 1600 },
+            'Hyderabad-Delhi': { train: 1570, bus: 1600 },
+            'Delhi-Pune': { train: 1470, bus: 1500 },
+            'Pune-Delhi': { train: 1470, bus: 1500 },
+            'Delhi-Ahmedabad': { train: 935, bus: 950 },
+            'Ahmedabad-Delhi': { train: 935, bus: 950 },
+            'Delhi-Jaipur': { train: 280, bus: 270 },
+            'Jaipur-Delhi': { train: 280, bus: 270 }
+        };
+
+        let map;
+        let currentRoute;
+
+        // Initialize map
+        function initMap() {
+            map = L.map('map').setView([20.5937, 78.9629], 5);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 18
+            }).addTo(map);
+
+            // Check if there's search data
+            const searchData = sessionStorage.getItem('searchData');
+            if (searchData) {
+                const data = JSON.parse(searchData);
+                document.getElementById('fromCity').value = data.from;
+                document.getElementById('toCity').value = data.to;
+                document.getElementById('transportMode').value = data.transportType;
+                setTimeout(() => showRoute(), 500);
+            }
+        }
+
+        function showRoute() {
+            const from = document.getElementById('fromCity').value;
+            const to = document.getElementById('toCity').value;
+            const mode = document.getElementById('transportMode').value;
+
+            if (!from || !to) {
+                alert('Please select both origin and destination cities');
+                return;
+            }
+
+            if (from === to) {
+                alert('Origin and destination cannot be the same');
+                return;
+            }
+
+            // Clear existing route
+            if (currentRoute) {
+                map.removeLayer(currentRoute);
+            }
+
+            // Get coordinates
+            const fromCoords = cityCoords[from];
+            const toCoords = cityCoords[to];
+
+            // Add markers
+            const fromMarker = L.marker(fromCoords).addTo(map)
+                .bindPopup(`<b>${from}</b><br>Origin`);
+            
+            const toMarker = L.marker(toCoords).addTo(map)
+                .bindPopup(`<b>${to}</b><br>Destination`);
+
+            // Draw route line
+            const routeKey = `${from}-${to}`;
+            const routeColor = mode === 'train' ? '#FF9933' : '#138808';
+            
+            currentRoute = L.polyline([fromCoords, toCoords], {
+                color: routeColor,
+                weight: 4,
+                opacity: 0.7,
+                dashArray: mode === 'train' ? null : '10, 10'
+            }).addTo(map);
+
+            // Fit map to route
+            map.fitBounds([fromCoords, toCoords], { padding: [50, 50] });
+
+            // Calculate distance
+            const distance = distances[routeKey] ? distances[routeKey][mode] : calculateApproxDistance(fromCoords, toCoords);
+            const duration = mode === 'train' ? Math.round(distance / 65) : Math.round(distance / 50);
+            const co2Saved = mode === 'train' ? Math.round(distance * 0.14) : 0;
+
+            // Display route info
+            displayRouteInfo(from, to, distance, duration, mode, co2Saved);
+        }
+
+        function calculateApproxDistance(coord1, coord2) {
+            const R = 6371; // Earth's radius in km
+            const lat1 = coord1[0] * Math.PI / 180;
+            const lat2 = coord2[0] * Math.PI / 180;
+            const deltaLat = (coord2[0] - coord1[0]) * Math.PI / 180;
+            const deltaLon = (coord2[1] - coord1[1]) * Math.PI / 180;
+
+            const a = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) +
+                     Math.cos(lat1) * Math.cos(lat2) *
+                     Math.sin(deltaLon/2) * Math.sin(deltaLon/2);
+            
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return Math.round(R * c);
+        }
+
+        function displayRouteInfo(from, to, distance, duration, mode, co2Saved) {
+            const routeInfo = document.getElementById('routeInfo');
+            const infoGrid = document.getElementById('infoGrid');
+
+            let infoHTML = `
+                <div class="info-card">
+                    <div class="info-icon">📍</div>
+                    <div class="info-value">${from} → ${to}</div>
+                    <div class="info-label">Route</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">📏</div>
+                    <div class="info-value">${distance} km</div>
+                    <div class="info-label">Distance</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">⏱️</div>
+                    <div class="info-value">${duration} hrs</div>
+                    <div class="info-label">Approx. Duration</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">${mode === 'train' ? '🚆' : '🚌'}</div>
+                    <div class="info-value">${mode === 'train' ? 'Train' : 'Bus'}</div>
+                    <div class="info-label">Transport Mode</div>
+                </div>
+            `;
+
+            if (mode === 'train') {
+                infoHTML += `
+                    <div class="info-card">
+                        <div class="info-icon">🌱</div>
+                        <div class="info-value">${co2Saved} kg</div>
+                        <div class="info-label">CO₂ Saved vs Car</div>
+                    </div>
+                `;
+            }
+
+            infoGrid.innerHTML = infoHTML;
+            routeInfo.classList.add('active');
+        }
+
+        // Initialize on load
+        initMap();
+    </script>
+</body>
+</html>
